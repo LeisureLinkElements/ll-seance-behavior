@@ -1,0 +1,116 @@
+<script>
+  var LeisureLinkBehaviors = LeisureLinkBehaviors || {};
+  LeisureLinkBehaviors.SeanceBehavior = {
+
+    properties: {
+
+      seanceStates: {
+        type: Object,
+        value: function () {
+          return {
+            created: false,
+            ready: false,
+            attached: false,
+            detached: false
+          };
+        }
+      },
+
+      seanceEntityEventPrefix: {
+        type: String,
+        value: 'seance-entity',
+        readOnly: true
+      },
+
+      seanceElementId: ''
+
+    },
+
+    // lifecycle callbacks:
+
+    created: function () {
+      this.seanceElementId = Polymer.dom(this).parentNode.id;
+      this._seanceStateAttained('created');
+    },
+
+    ready: function () {
+      this._seanceStateAttained('ready');
+    },
+
+    attached: function () {
+      this._seanceStateAttained('attached');
+    },
+
+    detached: function () {
+      this._seanceStateAttained('detached');
+    },
+
+    /**
+     * Set attribute(s) on, or call a callback with, a Polymer element that...
+     * - also has this SeanceBehavior.
+     * - may not yet exist in the local DOM of this element.
+     * - may or may not be in the desired life-cycle state ('created', 'ready', 'attached' or 'detached')
+     *
+     * Dependencies: lodash.js
+     *
+     * @param entityId {string} The ID of the element ('entity') to communicate with.
+     * @param state {string} The state that we are waiting for the entity to be in:
+     * - 'created', 'ready', 'attached' or 'detached'
+     * @param attributes {object} (optional) attributes to set on the entity when it attains the desired state.
+     * @param callback {function} (optional) method to call in this element when entity attains the desired state.
+     * - The callback is called with the entity as the only argument.
+     */
+    seanceBegin: function (entityId, state, attributes, callback) {
+
+      // Validate args:
+      if (!_.isString(entityId) || !_.isBoolean(this.seanceStates[state])) {
+        return false;
+      }
+
+      // Locate the entity:
+      var
+          _this = this,
+          entity = this.$$('#' + entityId);
+
+      if (entity && entity.seanceStates && entity.seanceStates[state]) {
+        // Entity already exists in the desired state. Parents, siblings and children are ecstatic.
+        this.seanceCommunicateToEntity(entity, attributes, callback);
+      } else {
+        // Entity either does not exist or is not in the desired state yet. Relatives are grief-stricken.
+        var eventType = this._seanceGetEventType(entityId, state);
+        this.addEventListener(eventType, function (evt) {
+          evt.target.removeEventListener(evt.type);
+          this.seanceCommunicateToEntity(evt.target, attributes, callback);
+        });
+      }
+
+      return true;
+    },
+
+    seanceEnd: function(entityId, state) {
+      this.removeEventListener(this._seanceGetEventType(entityId, state));
+    },
+
+    _seanceCommunicateToEntity: function (entity, attributes, callback) {
+      if (!_.isObject(entity)) {
+        return false;
+      }
+      if (_.isObject(attributes)) {
+        _.assign(entity, attributes);
+      }
+      if (_.isFunction(callback)) {
+        callback.call(entity);
+      }
+    },
+
+    _seanceStateAttained: function (state) {
+      this.seanceStates[state] = true;
+      this.fire(this._seanceGetEventType(this.seanceElementId, state));
+    },
+
+    _seanceGetEventType: function (entityId, state) {
+      return this.seanceEntityEventPrefix + '-' + entityId + '-' + state;
+    }
+
+  };
+</script>
