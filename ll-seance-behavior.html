@@ -74,13 +74,13 @@
 
       if (entity && entity.seanceStates && entity.seanceStates[state]) {
         // Entity already exists in the desired state. Parents, siblings and children are ecstatic.
-        this.seanceCommunicateToEntity(entity, attributes, callback);
+        this._seanceCommunicateToEntity(entity, attributes, callback);
       } else {
         // Entity either does not exist or is not in the desired state yet. Relatives are grief-stricken.
         var eventType = this._seanceGetEventType(entityId, state);
         this.addEventListener(eventType, function (evt) {
           evt.target.removeEventListener(evt.type);
-          this.seanceCommunicateToEntity(evt.target, attributes, callback);
+          this._seanceCommunicateToEntity(evt.target, attributes, callback);
         });
       }
 
