@@ -13,7 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script>
 
 /**
-Enables an element to perform the following actions on any child (target) elements that also have this behavior, have unique HTML ids, and either do not yet exist in the local DOM, or have not reached a desired life-cycle state ('ready', 'attached' or 'detached'):
+Enables an element to perform the following actions on any child (target) elements that also have this behavior, have unique HTML ids, may not yet exist in the local DOM, and may have not reached a desired life-cycle state ('ready', 'attached' or 'detached'):
 
 - Set one or more attribute(s) on the target element.
 - Set up a callback function that will be called with the target element as an argument.
@@ -28,20 +28,26 @@ Usage:
  1. Add LeisureLinkBehaviors.SeanceBehavior to the parent and child (target) elements.
  1. In the parent element, call the seanceBegin method to set some attributes on the target element, like this:
 
-      this.seanceBegin('theTableId', 'attached', {items: dataFromServer, title: 'Employees'});
+        this.seanceBegin('theTableId', 'attached', {
+          items: dataFromServer,
+          title: 'Employees'
+        });
 
-      // You can also pass 'ready' or 'detached' as the event.
-      // 'created' isn't supported because the behavior doesn't work at that stage.
+        // You can also pass 'ready' or 'detached' as the event.
+        // ('created' not supported because the behavior doesn't work that early.)
 
  1. In the parent element, call the seanceBegin method to set up a callback, like this:
 
-      this.seanceBegin('theTableId', 'attached', null, this.tellMeItAppeared);
+        this.seanceBegin('theTableId', 'attached', null, this.tellMeItAppeared);
 
-       // this.tellMeItAppeared will then be called with the target element as the sole argument.
+        // this.tellMeItAppeared will then be called with the target element.
+        // The seance ends at this point.
+        // It will not repeat the actions, even if the target element
+        // detaches and then reattaches later.
 
-1. If you change your mind:
+ 1. If you change your mind:
 
-this.seanceEnd('theTableId', 'attached');
+        this.seanceEnd('theTableId', 'attached');
 
 @demo demo/index.html
 @polymerBehavior
@@ -91,8 +97,6 @@ this.seanceEnd('theTableId', 'attached');
      * - also has this SeanceBehavior.
      * - may not yet exist in the local DOM of this element.
      * - may or may not be in the desired life-cycle state ('ready', 'attached' or 'detached')
-     *
-     * Dependencies: lodash.js
      *
      * @param entityId {string} The ID of the element ('entity') to communicate with.
      * @param state {string} The state that we are waiting for the entity to be in:
