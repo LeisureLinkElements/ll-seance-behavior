@@ -1,19 +1,18 @@
 {
-  "name": "seed-element",
+  "name": "ll-seance-behavior",
   "version": "1.0.0",
   "authors": [
-    "Anonymous <anonymous@example.com>"
+    "Charles Koehl <ckoehl@leisurelink.com>"
   ],
-  "description": "An element providing a solution to no problem in particular.",
+  "description": "Talk to dead elements.",
   "keywords": [
     "web-component",
     "web-components",
-    "polymer",
-    "seed"
+    "polymer"
   ],
-  "main": "seed-element.html",
+  "main": "ll-seance-behavior.html",
   "license": "http://polymer.github.io/LICENSE.txt",
-  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "homepage": "https://github.com/LeisureLinkElements/ll-seance-behavior",
   "ignore": [
     "/.*",
     "/test/",
