@@ -1,11 +1,5 @@
 # ll-seance-behavior
 
-## Tag-line
-
-Talk to dead elements.
-
-## Description
-
 Enables an element to perform the following actions on any child (target) elements that also have this behavior, have unique HTML ids, and either do not yet exist in the local DOM, or have not reached a desired life-cycle state ('ready', 'attached' or 'detached'):
 
 - Set one or more attribute(s) on the target element.

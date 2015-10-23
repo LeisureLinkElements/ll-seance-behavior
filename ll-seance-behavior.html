@@ -1,6 +1,52 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
 <link rel="import" href="../ll-firelog-behavior/ll-firelog-behavior.html">
 
 <script>
+
+/**
+Enables an element to perform the following actions on any child (target) elements that also have this behavior, have unique HTML ids, and either do not yet exist in the local DOM, or have not reached a desired life-cycle state ('ready', 'attached' or 'detached'):
+
+- Set one or more attribute(s) on the target element.
+- Set up a callback function that will be called with the target element as an argument.
+
+Examples of target elements:
+
+- an element inside a dom-if or dom-repeat template
+- an element dynamically added to the local DOM
+
+Usage:
+
+ 1. Add LeisureLinkBehaviors.SeanceBehavior to the parent and child (target) elements.
+ 1. In the parent element, call the seanceBegin method to set some attributes on the target element, like this:
+
+      this.seanceBegin('theTableId', 'attached', {items: dataFromServer, title: 'Employees'});
+
+      // You can also pass 'ready' or 'detached' as the event.
+      // 'created' isn't supported because the behavior doesn't work at that stage.
+
+ 1. In the parent element, call the seanceBegin method to set up a callback, like this:
+
+      this.seanceBegin('theTableId', 'attached', null, this.tellMeItAppeared);
+
+       // this.tellMeItAppeared will then be called with the target element as the sole argument.
+
+1. If you change your mind:
+
+this.seanceEnd('theTableId', 'attached');
+
+@demo demo/index.html
+@polymerBehavior
+*/
+
   var LeisureLinkBehaviors = LeisureLinkBehaviors || {};
   LeisureLinkBehaviors.SeanceBehaviorImpl = {
 
