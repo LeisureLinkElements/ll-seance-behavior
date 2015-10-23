@@ -57,7 +57,7 @@
      */
     seanceBegin: function (entityId, state, attributes, callback) {
 
-      this._fireLog('seanceBegin('+entityId+', '+state+')');
+      this._fireLog('seanceBegin(' + entityId + ', ' + state + ')');
 
       // Validate args:
       if (!_.isString(entityId) || !_.isBoolean(this.seanceStates[state])) {
@@ -70,14 +70,14 @@
           entity = this.$$('#' + entityId);
 
       if (entity && entity.seanceStates && entity.seanceStates[state]) {
-        this._fireLog('Entity already exists and is '+state);
+        this._fireLog('Entity already exists and is ' + state);
         // Entity already exists in the desired state. Parents, siblings and children are ecstatic.
         this._seanceCommunicateToEntity(entity, attributes, callback);
       } else {
         // Entity either does not exist or is not in the desired state yet. Relatives are grief-stricken.
-        var eventType = this._seanceGetEventType(entityId, state);
-        this._fireLog('Entity does not exist or is not '+state+' so listen for '+eventType);
-        Polymer.dom(this.root).parentNode.addEventListener(eventType, function (evt) {
+        var eventType = this.fireLogEventPrefix + this._seanceGetEventType(entityId, state);
+        this._fireLog('Entity does not exist or is not ' + state + ' so listen for ' + eventType);
+        Polymer.dom(this).parentNode.addEventListener(eventType, function (evt) {
           evt.target.removeEventListener(evt.type);
           this._seanceCommunicateToEntity(evt.target, attributes, callback);
         });
@@ -86,12 +86,12 @@
       return true;
     },
 
-    seanceEnd: function(entityId, state) {
+    seanceEnd: function (entityId, state) {
       this.removeEventListener(this._seanceGetEventType(entityId, state));
     },
 
     _seanceCommunicateToEntity: function (entity, attributes, callback) {
-      this._fireLog('_seanceCommunicateToEntity',entity);
+      this._fireLog('_seanceCommunicateToEntity', entity);
       if (!_.isObject(entity)) {
         return false;
       }
@@ -105,7 +105,7 @@
 
     _seanceStateAttained: function (state) {
       this.seanceStates[state] = true;
-      if(!_.isEmpty(this.id)) {
+      if (!_.isEmpty(this.id)) {
         this._fireLogFire(this._seanceGetEventType(this.id, state));
       }
     },
