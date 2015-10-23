@@ -61,6 +61,8 @@
      */
     seanceBegin: function (entityId, state, attributes, callback) {
 
+      console.log('seance begun with '+entityId+', '+state, attributes);
+
       // Validate args:
       if (!_.isString(entityId) || !_.isBoolean(this.seanceStates[state])) {
         return false;
