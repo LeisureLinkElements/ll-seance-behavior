@@ -29,7 +29,7 @@
     // lifecycle callbacks:
 
     created: function () {
-      this.seanceElementId = Polymer.dom(this).parentNode.id;
+      this._seanceStateAttained('created');
     },
 
     ready: function () {
@@ -60,8 +60,6 @@
      * - The callback is called with the entity as the only argument.
      */
     seanceBegin: function (entityId, state, attributes, callback) {
-
-      console.log('seance begun with '+entityId+', '+state, attributes);
 
       // Validate args:
       if (!_.isString(entityId) || !_.isBoolean(this.seanceStates[state])) {
@@ -106,7 +104,7 @@
 
     _seanceStateAttained: function (state) {
       this.seanceStates[state] = true;
-      this.fire(this._seanceGetEventType(this.seanceElementId, state));
+      this.fire(this._seanceGetEventType(this.id, state));
     },
 
     _seanceGetEventType: function (entityId, state) {
