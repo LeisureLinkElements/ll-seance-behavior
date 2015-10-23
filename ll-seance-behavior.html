@@ -79,7 +79,7 @@
         this._fireLog('Entity does not exist or is not ' + state + ' so listen for ' + eventType);
         Polymer.dom(this).parentNode.addEventListener(eventType, function (evt) {
           evt.target.removeEventListener(evt.type);
-          this._seanceCommunicateToEntity(evt.target, attributes, callback);
+          _this._seanceCommunicateToEntity(evt.target, attributes, callback);
         });
       }
 
@@ -108,7 +108,7 @@
       if (!_.isEmpty(this.id)) {
         var eventType = this._seanceGetEventType(this.id, state);
         this.fire(eventType);
-        this._fireLog('Fired '+eventType);
+        this._fireLog('Fired ' + eventType);
       }
     },
 
