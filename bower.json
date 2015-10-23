@@ -20,7 +20,8 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.0.0",
-    "lodash": ">=3.10.1"
+    "lodash": ">=3.10.1",
+    "ll-firelog-behavior": "LeisureLinkElements/ll-firelog-behavior"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",

@@ -1,6 +1,8 @@
+<link rel="import" href="../ll-firelog-behavior/ll-firelog-behavior.html">
+
 <script>
   var LeisureLinkBehaviors = LeisureLinkBehaviors || {};
-  LeisureLinkBehaviors.SeanceBehavior = {
+  LeisureLinkBehaviors.SeanceBehaviorImpl = {
 
     properties: {
 
@@ -71,7 +73,7 @@
       } else {
         // Entity either does not exist or is not in the desired state yet. Relatives are grief-stricken.
         var eventType = this._seanceGetEventType(entityId, state);
-        this.addEventListener(eventType, function (evt) {
+        Polymer.dom(this.root).addEventListener(eventType, function (evt) {
           evt.target.removeEventListener(evt.type);
           this._seanceCommunicateToEntity(evt.target, attributes, callback);
         });
@@ -106,4 +108,5 @@
     }
 
   };
+  LeisureLinkBehaviors.SeanceBehavior = [LeisureLinkBehaviors.FireLogBehavior, LeisureLinkBehaviors.SeanceBehaviorImpl]
 </script>
