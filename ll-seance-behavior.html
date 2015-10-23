@@ -77,7 +77,7 @@
         // Entity either does not exist or is not in the desired state yet. Relatives are grief-stricken.
         var eventType = this._seanceGetEventType(entityId, state);
         this._fireLog('Entity does not exist or is not '+state+' so listen for '+eventType);
-        Polymer.dom(this.root).addEventListener(eventType, function (evt) {
+        Polymer.dom(this.root).parentNode.addEventListener(eventType, function (evt) {
           evt.target.removeEventListener(evt.type);
           this._seanceCommunicateToEntity(evt.target, attributes, callback);
         });
@@ -105,7 +105,9 @@
 
     _seanceStateAttained: function (state) {
       this.seanceStates[state] = true;
-      this._fireLogFire(this._seanceGetEventType(this.id, state));
+      if(!_.isEmpty(this.id)) {
+        this._fireLogFire(this._seanceGetEventType(this.id, state));
+      }
     },
 
     _seanceGetEventType: function (entityId, state) {
