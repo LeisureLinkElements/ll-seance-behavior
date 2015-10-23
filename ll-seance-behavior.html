@@ -28,10 +28,6 @@
 
     // lifecycle callbacks:
 
-    created: function () {
-      this._seanceStateAttained('created');
-    },
-
     ready: function () {
       this._seanceStateAttained('ready');
     },
@@ -48,13 +44,13 @@
      * Set attribute(s) on, or call a callback with, a Polymer element that...
      * - also has this SeanceBehavior.
      * - may not yet exist in the local DOM of this element.
-     * - may or may not be in the desired life-cycle state ('created', 'ready', 'attached' or 'detached')
+     * - may or may not be in the desired life-cycle state ('ready', 'attached' or 'detached')
      *
      * Dependencies: lodash.js
      *
      * @param entityId {string} The ID of the element ('entity') to communicate with.
      * @param state {string} The state that we are waiting for the entity to be in:
-     * - 'created', 'ready', 'attached' or 'detached'
+     * - 'ready', 'attached' or 'detached' ('created' is too early for any of this to work)
      * @param attributes {object} (optional) attributes to set on the entity when it attains the desired state.
      * @param callback {function} (optional) method to call in this element when entity attains the desired state.
      * - The callback is called with the entity as the only argument.
