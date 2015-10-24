@@ -1,0 +1,36 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../ll-seance-behavior.html">
+<link rel="import" href="../../paper-progress/paper-progress.html">
+
+<dom-module id="child-element">
+  <template>
+    <paper-progress value="[[myProgress]]"></paper-progress>
+  </template>
+</dom-module>
+
+<style>
+  paper-progress {
+    width:100%;
+  }
+</style>
+
+<script>
+
+  Polymer({
+
+    is: 'child-element',
+
+    behaviors: [LeisureLinkBehaviors.SeanceBehavior],
+
+    properties: {
+
+      myProgress: {
+        type: Number,
+        value: 0
+      }
+
+    }
+
+  });
+
+</script>

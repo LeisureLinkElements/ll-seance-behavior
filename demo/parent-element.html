@@ -1,11 +1,110 @@
-<dom-module id="demo-element">
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../ll-seance-behavior.html">
+<link rel="import" href="child-element.html">
 
-  <template>
+<dom-module id="parent-element">
 
-    <paper-button raised>Show Progress Bar</paper-button>
+  <style>
 
-    <template is="dom-if" if="circle">
-      <paper-progress value="0"></paper-progress>
+    child-element {
+      margin: 0 auto;
+      display: block;
+      border: 10px solid darkturquoise;
+      background-color: white;
+      padding: 10px;
+    }
+    code {
+      font-size: 16px;
+      color: blue;
+    }
+
+    .demo-button {
+      margin-top:20px;
+      float:left;
+    }
+
+    .demo-func {
+      float:right;
+    }
+
+    .status {
+      font-size:20px;
+    }
+
+    .child-label {
+      display: block;
+      margin: 30px 0 0 0;
+    }
+
+    paper-button {
+      margin: 0 20px 0 0;
+      text-transform:none;
+    }
+
+    paper-button.colorful {
+      color: #4285f4;
+    }
+
+    paper-button[raised].colorful {
+      background: #4285f4;
+      color: #fff;
+    }
+
+    paper-button[toggles] {
+      transition: all 0.3s;
+    }
+
+    paper-button[toggles][active] {
+      background-color: rgba(0, 0, 0, 0.25);
+    }
+
+    paper-button[toggles][active].colorful {
+      background-color: rgba(66, 133, 244, 0.25);
+    }
+
+    paper-button[toggles][active][raised].colorful {
+      background-color: rgba(66, 133, 244, 0.75);
+    }
+
+    paper-button.hover:hover {
+      background: #eee;
+    }
+
+    paper-button.ripple {
+      --paper-button-ink-color: var(--paper-pink-a200);
+    }
+
+  </style>
+
+  <template id="theParent">
+
+    <p>There is a conditional template at the bottom of this element that is shown when this element's <em>reveal</em> property is set to true true. Click these two buttons to see that happen:</p>
+
+    <paper-button class="colorful" raised on-click="justShow">set this.reveal = true</paper-button>
+
+    <paper-button class="colorful" raised on-click="justHide">set this.reveal = false</paper-button>
+
+    <span class="status">this.reveal = <span>[[reveal]]</span></span>
+
+    <p>That conditional template contains a child-element (id = "theChild") with a myProgress property set to zero by default.</p>
+
+    <p>The child-element contains a progress bar whose value is bound to the myProgress property.</p>
+
+    <paper-button class="colorful demo-button" raised on-click="demoTheBehavior">call demoTheBehavior()</paper-button>
+
+    <code class="demo-func"><pre>
+      demoTheBehavior: function () {
+        this.seanceBegin('theChild', 'attached', {myProgress: 50});
+        this.reveal = true;
+      }
+    </pre></code>
+
+    <div style="clear:both"></div>
+
+    <template is="dom-if" if="[[reveal]]" restamp="true">
+      <code class="child-label">child-element:</code>
+      <child-element id="theChild" fire-log fire-log-name="#theChild"></child-element>
     </template>
 
   </template>
@@ -14,10 +113,9 @@
 
 <script>
 
-
   Polymer({
 
-    is: 'demo-element',
+    is: 'parent-element',
 
     behaviors: [LeisureLinkBehaviors.SeanceBehavior],
 
@@ -29,187 +127,28 @@
 
     properties: {
 
-      pmcId: String,
-
-      relationSource: String,
-
-      relationSourceSingular: String,
-
-      relationSourceSingularCapitalized: String,
-
-      relationSourceId: String,
-
-      unitsRequestUrl: {
-        type: String,
-        computed: '_computeUnitsRequestUrl(pmcId, relationSource, relationSourceId)'
-      },
-
-      unassocUnitsSearchString: String,
-
-      noAssociatedUnits: {
+      reveal: {
         type: Boolean,
-        value: true
+        value: false
       },
 
-      selectedAssociatedUnitIDs: {
-        type: Array,
-        value: function () {
-          return [];
-        }
-      },
-
-      selectedUnassociatedUnitIDs: {
-        type: Array,
-        value: function () {
-          return [];
-        }
-      },
-
-      noUnassociatedUnits: {
-        type: Boolean,
-        value: true
-      },
-
-      addUnitsButtonText: {
-        type: String,
-        computed: '_getAddUnitsButtonText(noAssociatedUnits)'
-      }
+      childStatusMessage: 'hidden'
 
     },
 
-    // Element Lifecycle
-
-    ready: function () {
-      this._fireLog('ready');
-      this.relationSourceSingularCapitalized = _.capitalize(this.relationSourceSingular);
+    justShow: function () {
+      this.reveal = true;
     },
 
-    attached: function () {
-      this._fireLog('attached');
+    justHide: function () {
+      this.reveal = false;
     },
 
-    detached: function () {
-      this._fireLog('detached');
-    },
-
-    // Element Behavior
-
-    _getAddUnitsButtonText: function () {
-      return 'Associate with' + (this.noAssociatedUnits ? '' : ' More') + ' Properties';
-    },
-
-    _computeUnitsRequestUrl: function (pmcId, relationSource, relationSourceId) {
-      return '/integration-hub/accounts/' + pmcId + '/' + relationSource + '/' + relationSourceId + '/units';
-    },
-
-    load: function () {
-      this._fireLog('load');
-      this._getAssociatedUnits();
-    },
-
-    _getAssociatedUnits: function () {
-      this._fireLog('_getAssociatedUnits');
-      this.$.getAssociatedUnitsRequest.generateRequest();
-    },
-
-    _handleGotAssociatedUnits: function (results) {
-      this._fireLog('_handleGotAssociatedUnits called with ', results);
-      if (this._requestSucceeded(results)) {
-        var units = results.detail.response.result;
-        this.noAssociatedUnits = true;
-        if (units) {
-          this._fireLog('New associated units received:', units);
-          if (_.isArray(units) && units.length) {
-            this.seanceBegin('associatedUnitsTable', 'attached', {items: units});
-            this.noAssociatedUnits = false;
-          }
-        }
-      }
-    },
-
-    _goAddUnits: function () {
-      this.$.getUnassociatedUnitsRequest.generateRequest();
-      this.$.unassociatedUnitsTableContainer.show();
-    },
-
-    _closeAddUnits: function () {
-      this.$.unassociatedUnitsTableContainer.hide();
-    },
-
-    _searchUnassociatedUnits: function (evt) {
-      if (evt && _.isObject(evt.detail)) {
-        this.$.getUnassociatedUnitsRequest.params.nameQuery = evt.detail.name;
-        this.$.getUnassociatedUnitsRequest.generateRequest();
-      }
-    },
-
-    _handleGotUnassociatedUnits: function (results) {
-      this._fireLog('_handleGotUnassociatedUnits called with ', results);
-      if (this._requestSucceeded(results)) {
-        var units = results.detail.response.result;
-        this.noUnassociatedUnits = true;
-        if (units) {
-          this._fireLog('New unassociated units received:', units);
-          if (_.isArray(units) && units.length) {
-            this.seanceBegin('unassociatedUnitsTable', 'attached', {items: units});
-            this.noUnassociatedUnits = false;
-          }
-        }
-      }
-    },
-
-    _associatedUnitsSelectionChanged: function (evt) {
-      if (evt && _.isArray(evt.detail)) {
-        this.selectedAssociatedUnitIDs = evt.detail;
-        this.toggleClass('hide', this.selectedAssociatedUnitIDs.length < 1, this.$.buttonRemoveSelected);
-      }
-    },
-
-    _removeUnits: function () {
-      var remover = this.$.removeUnitsRequest;
-      remover.body = this.selectedAssociatedUnitIDs;
-      remover.generateRequest();
-      this._fireLog('_removeUnits', this.selectedAssociatedUnitIDs);
-    },
-
-    _handleRemovedAssociatedUnits: function (results) {
-      this._fireLog('_handleRemovedAssociatedUnits called with:', results);
-      if (this._requestSucceeded(results)) {
-        this._fireLogFire('orchestrator-display-message', 'Done! Unit' + (this.selectedAssociatedUnitIDs.length > 1 ? 's' : '') + ' removed.');
-      } else {
-        this._fireLogFire('orchestrator-display-error', 'Failed to remove units!');
-      }
-      this._getAssociatedUnits();
-    },
-
-    _unassociatedUnitsSelectionChanged: function (evt) {
-      if (evt && _.isArray(evt.detail)) {
-        this.selectedUnassociatedUnitIDs = evt.detail;
-      }
-    },
-
-    _addUnits: function () {
-      var adder = this.$.addUnitsRequest;
-      adder.body = this.selectedUnassociatedUnitIDs;
-      adder.generateRequest();
-      this._fireLog('_addUnits', this.selectedUnassociatedUnitIDs);
-      this._closeAddUnits();
-    },
-
-    _handleAddedUnassociatedUnits: function (results) {
-      this._fireLog('_handleAddedUnassociatedUnits called with', results);
-      if (this._requestSucceeded(results)) {
-        this._fireLogFire('orchestrator-display-message', 'Done! Unit' + (this.selectedUnassociatedUnitIDs.length > 1 ? 's' : '') + ' added.');
-      } else {
-        this._fireLog('_handleAddedUnassociatedUnits error:', err);
-        this._fireLogFire('orchestrator-display-error', 'Failed to add units!');
-      }
-      this._getAssociatedUnits();
-    },
-
-    _requestSucceeded: function (results) {
-      return results && results.detail && results.detail.succeeded;
+    demoTheBehavior: function () {
+      this.seanceBegin('theChild', 'attached', {myProgress: 50});
+      this.reveal = true;
     }
+
   });
 
 </script>
