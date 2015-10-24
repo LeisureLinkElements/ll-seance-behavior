@@ -12,46 +12,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <script>
 
-/**
-Enables an element to perform the following actions on any child (target) elements that also have this behavior, have unique HTML ids, may not yet exist in the local DOM, and may have not reached a desired life-cycle state ('ready', 'attached' or 'detached'):
+  /**
+   Enables an element to perform the following actions on any child (target) elements that also have this behavior, have unique HTML ids, may not yet exist in the local DOM, and may have not reached a desired life-cycle state ('ready', 'attached' or 'detached'):
 
-- Set one or more attribute(s) on the target element.
-- Set up a callback function that will be called with the target element as an argument.
+   - Set one or more attribute(s) on the target element.
+   - Set up a callback function that will be called with the target element as an argument.
 
-Examples of target elements:
+   Examples of target elements:
 
-- an element inside a dom-if or dom-repeat template
-- an element dynamically added to the local DOM
+   - an element inside a dom-if or dom-repeat template
+   - an element dynamically added to the local DOM
 
-Usage:
+   Usage:
 
- 1. Add LeisureLinkBehaviors.SeanceBehavior to the parent and child (target) elements.
- 1. In the parent element, call the seanceBegin method to set some attributes on the target element, like this:
+   1. Add LeisureLinkBehaviors.SeanceBehavior to the parent and child (target) elements.
+   1. The parent element can then call the seanceBegin method to set some attributes on the target element, like this:
 
-        this.seanceBegin('theTableId', 'attached', {
+   // You can also pass 'ready' or 'detached' as the event.
+   // The 'created' event is not supported because the behavior won't work yet.
+   this.seanceBegin('theTableId', 'attached', {
           items: dataFromServer,
           title: 'Employees'
         });
 
-        // You can also pass 'ready' or 'detached' as the event.
-        // ('created' not supported because the behavior doesn't work that early.)
+   1. The parent element can also call the seanceBegin method to set up a callback, like this. When the target element is attached (if not already), this.tellMeAboutIt is called called with the target element as the only argument.
 
- 1. In the parent element, call the seanceBegin method to set up a callback, like this:
+   this.seanceBegin('theTableId', 'attached', null, this.tellMeAboutIt);
 
-        this.seanceBegin('theTableId', 'attached', null, this.tellMeItAppeared);
+   1. NOTE: In both cases (setting attributes or setting a callback), the seance actions are only performed once, even if the target element detaches and reattaches later.
 
-        // this.tellMeItAppeared will then be called with the target element.
-        // The seance ends at this point.
-        // It will not repeat the actions, even if the target element
-        // detaches and then reattaches later.
+   1. If the target element hasn't attached yet, this will prevent those actions from being performed:
 
- 1. If you change your mind:
+   this.seanceEnd('theTableId', 'attached');
 
-        this.seanceEnd('theTableId', 'attached');
+   NOTE: This behavior includes FireLogBehavior (ll-firelog-behavior), so the API Reference and Show Private API buttons don't work because this behavior is created as SeanceBehaviorImpl.
 
-@demo demo/index.html
-@polymerBehavior
-*/
+   @demo
+   @polymerBehavior
+   */
 
   var LeisureLinkBehaviors = LeisureLinkBehaviors || {};
   LeisureLinkBehaviors.SeanceBehaviorImpl = {
