@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "paper-progress": "PolymerElements/paper-progress",
     "web-component-tester": "*"
   }
 }
