@@ -157,6 +157,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     _seanceStateAttained: function (state) {
       this.seanceStates[state] = true;
+      // Update mutually-exclusive states:
+      switch (state) {
+        case 'attached':
+          this.seanceStates.detached = false;
+          break;
+        case 'detached':
+          this.seanceStates.attached = false;
+      }
       if (!_.isEmpty(this.id)) {
         var eventType = this._seanceGetEventType(this.id, state);
         this.fire(eventType);
