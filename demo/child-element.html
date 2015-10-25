@@ -4,11 +4,16 @@
 
 <dom-module id="child-element">
   <template>
+    <code class="child-label">#theChild (myProgress = <span>[[myProgress]]</span>)</code>
     <paper-progress value="[[myProgress]]"></paper-progress>
   </template>
 </dom-module>
 
 <style>
+  .child-label {
+    display: block;
+    margin: 0 0 30px;
+  }
   paper-progress {
     width:100%;
   }
