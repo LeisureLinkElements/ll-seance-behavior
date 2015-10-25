@@ -68,7 +68,7 @@ NOTE: This behavior includes FireLogBehavior (ll-firelog-behavior), so the API R
         }
       },
 
-      seanceEntityEventPrefix: {
+      _seanceEntityEventPrefix: {
         type: String,
         value: 'seance-entity',
         readOnly: true
@@ -95,6 +95,9 @@ NOTE: This behavior includes FireLogBehavior (ll-firelog-behavior), so the API R
      * - also has this SeanceBehavior.
      * - may not yet exist in the local DOM of this element.
      * - may or may not be in the desired life-cycle state ('ready', 'attached' or 'detached')
+     * - ('created' event not supported because the behavior won't work yet)
+     *
+     * Returns true on success.
      *
      * @param entityId {string} The ID of the element ('entity') to communicate with.
      * @param state {string} The state that we are waiting for the entity to be in:
@@ -144,12 +147,12 @@ NOTE: This behavior includes FireLogBehavior (ll-firelog-behavior), so the API R
         return false;
       }
       if (_.isObject(attributes)) {
-        this._fireLog('Set attributes on entity.');
+        this._fireLog('Set these attributes on #'+entity.id+':',attributes);
         _.assign(entity, attributes);
       }
       if (_.isFunction(callback)) {
-        this._fireLog('Call callback with entity.');
-        callback.call(entity);
+        this._fireLog('Call callback with entity #'+entity.id);
+        callback.call(this, entity);
       }
     },
 
@@ -165,12 +168,12 @@ NOTE: This behavior includes FireLogBehavior (ll-firelog-behavior), so the API R
       }
       if (!_.isEmpty(this.id)) {
         var eventType = this._seanceGetEventType(this.id, state);
-        this.fireLogFire(eventType);
+        this._fireLogFire(eventType);
       }
     },
 
     _seanceGetEventType: function (entityId, state) {
-      return this.fireLogEventPrefix + this.seanceEntityEventPrefix + '-' + entityId + '-' + state;
+      return (this.fireLogEventPrefix || '') + this._seanceEntityEventPrefix + '-' + entityId + '-' + state;
     }
 
   };
