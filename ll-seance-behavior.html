@@ -167,13 +167,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       if (!_.isEmpty(this.id)) {
         var eventType = this._seanceGetEventType(this.id, state);
-        this.fire(eventType);
-        this._fireLog('Fired ' + eventType);
+        this.fireLogFire(eventType);
       }
     },
 
     _seanceGetEventType: function (entityId, state) {
-      return this.seanceEntityEventPrefix + '-' + entityId + '-' + state;
+      return this.fireLogEventPrefix + this.seanceEntityEventPrefix + '-' + entityId + '-' + state;
     }
 
   };
