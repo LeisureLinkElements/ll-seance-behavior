@@ -168,12 +168,13 @@ NOTE: This behavior includes FireLogBehavior (ll-firelog-behavior), so the API R
       }
       if (!_.isEmpty(this.id)) {
         var eventType = this._seanceGetEventType(this.id, state);
-        this._fireLogFire(eventType);
+        this.fire(eventType);
+        this._fireLog('Fired '+eventType);
       }
     },
 
     _seanceGetEventType: function (entityId, state) {
-      return (this.fireLogEventPrefix || '') + this._seanceEntityEventPrefix + '-' + entityId + '-' + state;
+      return this._seanceEntityEventPrefix + '-' + entityId + '-' + state;
     }
 
   };
