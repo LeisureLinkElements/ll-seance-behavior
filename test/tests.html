@@ -16,18 +16,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
 
-  <!-- Step 1: import the element to test -->
-  <link rel="import" href="../ll-seance-behavior.html">
+  <link rel="import" href="parent-element.html">
 </head>
 <body>
 
-
 <script>
 
-  describe('ll-seance-behavior', function () {
+  describe('parent-element (SAME CODE WORKS OUTSIDE OF TEST FRAMEWORK BUT NOT HERE. PLEASE SEE /test/testtest.html)', function () {
+
+    describe('when a parent with the behavior contains a conditional template that is initially unstamped and contains a child with the behavior', function () {
+
+      describe('when the "seanceBegin" method is called on the parent with the child\'s element id, the string "attached," and an object containing an attribute to set on the child as parameters, and then stamps the conditional template containing the child', function () {
+
+
+        it('the child should have the correct attribute value when it is attached', function (done) {
+
+          var parentEl = document.createElement('parent-element');
+          parentEl.setAttribute('id', 'theParent');
+          document.body.appendChild(parentEl);
+
+          parentEl.seanceBegin('theChild', 'attached', {myNumber: 5});
+
+          parentEl.addEventListener('seance-entity-theChild-attached', function () {
+            expect(parentEl.$$('#theChild')).to.be.ok;
+            expect(parentEl.$$('#theChild').myNumber).to.eql(5);
+            done();
+          });
+
+          parentEl.revealChild = true;
+        });
+
+      });
+
+    });
 
   });
+
 </script>
+
 
 </body>
 </html>

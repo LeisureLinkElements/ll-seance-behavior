@@ -1,0 +1,43 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../ll-seance-behavior.html">
+<link rel="import" href="child-element.html">
+
+<dom-module id="parent-element">
+
+  <template>
+    <h2>Parent Element</h2>
+    <p>parent's revealChild property = <span>[[revealChild]]</span></p>
+    <template is="dom-if" if="[[revealChild]]" restamp="true">
+      <h3>- Child Element</h3>
+      <child-element id="theChild"></child-element>
+    </template>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  ParentElement = Polymer({
+
+    is: 'parent-element',
+
+    behaviors: [LeisureLinkBehaviors.SeanceBehavior],
+
+    properties: {
+
+      revealChild: {
+        type: Boolean,
+        value: false
+      }
+
+    },
+
+    theCallback: function(entity) {
+      this._fireLog('received callback with ',entity);
+      alert('Received callback with the child element as the argument.');
+    }
+
+  });
+
+</script>
