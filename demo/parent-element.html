@@ -134,20 +134,12 @@
 
     behaviors: [LeisureLinkBehaviors.SeanceBehavior],
 
-    listeners: {
-      'associated-units-table-selected-items-changed': '_associatedUnitsSelectionChanged',
-      'unassociated-units-table-selected-items-changed': '_unassociatedUnitsSelectionChanged',
-      'iron-form-submit': '_searchUnassociatedUnits'
-    },
-
     properties: {
 
       reveal: {
         type: Boolean,
         value: false
-      },
-
-      childStatusMessage: 'hidden'
+      }
 
     },
 
