@@ -1,5 +1,5 @@
 <link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../ll-seance-behavior.html">
+<link rel="import" href="../../ll-seance-behavior/ll-seance-behavior.html">
 <link rel="import" href="child-element.html">
 
 <dom-module id="parent-element">
@@ -33,9 +33,9 @@
 
     },
 
-    theCallback: function(entity) {
+    aNiceCallback: function(entity) {
       this._fireLog('received callback with ',entity);
-      alert('Received callback with the child element as the argument.');
+      this.fire('aNiceCallback-called');
     }
 
   });
