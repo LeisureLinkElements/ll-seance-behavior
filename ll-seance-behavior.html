@@ -114,10 +114,10 @@
      */
     seanceBegin: function (entityId, state, attributes, callback) {
 
-      this._fireLog('Begin seance.');
+      this._seanceFire('seance-begin');
 
       // Validate args:
-      if (!_.isString(entityId) || !_.isBoolean(this.seanceStates[state])) {
+      if (!_.isString(entityId) || !_.isBoolean(this.seanceStates[state].is)) {
         return false;
       }
 
@@ -126,18 +126,20 @@
           _this = this,
           entity = this.$$('#' + entityId);
 
-      if (entity && entity.seanceStates && entity.seanceStates[state]) {
+      if (_.get(entity, 'seanceStates.'+state+'.is')) {
         this._fireLog('#' + entityId + ' already exists and is ' + state + ', so perform actions now...');
-        // Entity already exists in the desired state. Parents, siblings and children are ecstatic.
+        // Entity already exists in the desired state.
         this._seanceCommunicateToEntity(entity, attributes, callback);
       } else {
-        // Entity either does not exist or is not in the desired state yet. Relatives are grief-stricken.
+        // Entity either does not exist or is not in the desired state yet.
         var eventType = this._seanceGetEventType(entityId, state);
         this._fireLog('#' + entityId + ' does not exist or is not ' + state + ', so listen for ' + eventType + '.');
-        Polymer.dom(this).parentNode.addEventListener(eventType, function (evt) {
-          evt.target.removeEventListener(evt.type);
+        this.seanceEnd(entityId, state);
+        this.seanceStates[state].listener = function (evt) {
+          _this.seanceEnd(entityId, state);
           _this._seanceCommunicateToEntity(evt.target, attributes, callback);
-        });
+        };
+        Polymer.dom(this).parentNode.addEventListener(eventType, this.seanceStates[state].listener);
       }
 
       return true;
@@ -151,8 +153,10 @@
      * @param {string} state The state that we are waiting for the entity to be in: 'ready', 'attached' or 'detached' (The 'created' state is not supported because no code works at that point.)
      */
     seanceEnd: function (entityId, state) {
-      this._fireLog('End seance.');
-      this.removeEventListener(this._seanceGetEventType(entityId, state));
+      var eventType = this._seanceGetEventType(entityId, state);
+      if(this.seanceStates[state].listener) {
+        Polymer.dom(this).parentNode.removeEventListener(eventType, this.seanceStates[state].listener);
+      }
     },
 
     /**
@@ -175,6 +179,8 @@
         this._fireLog('Call callback with entity #'+entity.id);
         callback.call(this, entity);
       }
+      this._seanceFire('seance-complete');
+      return true;
     },
 
     /**
@@ -183,22 +189,26 @@
      * @private
      */
     _seanceStateAttained: function (state) {
-      this.seanceStates[state] = true;
+      this.seanceStates[state].is = true;
       // Update mutually-exclusive states:
       switch (state) {
         case 'attached':
-          this.seanceStates.detached = false;
+          this.seanceStates.detached.is = false;
           break;
         case 'detached':
-          this.seanceStates.attached = false;
+          this.seanceStates.attached.is = false;
       }
+      this._seanceFire(state);
+    },
+
     /**
      * Fire an event prefixed from this element, prefixed with seance-specific string, this element's id.
      * @param {string} suffix any string
      * @private
      */
+    _seanceFire: function(suffix) {
       if (!_.isEmpty(this.id)) {
-        var eventType = this._seanceGetEventType(this.id, state);
+        var eventType = this._seanceGetEventType(this.id, suffix);
         this.fire(eventType);
         this._fireLog('Fired '+eventType);
       }
