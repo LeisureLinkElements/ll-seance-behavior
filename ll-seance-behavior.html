@@ -63,11 +63,11 @@
               is: false,
               listener: null
             },
-            attached:  {
+            attached: {
               is: false,
               listener: null
             },
-            detached:  {
+            detached: {
               is: false,
               listener: null
             }
@@ -126,7 +126,7 @@
           _this = this,
           entity = this.$$('#' + entityId);
 
-      if (_.get(entity, 'seanceStates.'+state+'.is')) {
+      if (_.get(entity, 'seanceStates.' + state + '.is')) {
         this._fireLog('#' + entityId + ' already exists and is ' + state + ', so perform actions now...');
         // Entity already exists in the desired state.
         this._seanceCommunicateToEntity(entity, attributes, callback);
@@ -154,7 +154,7 @@
      */
     seanceEnd: function (entityId, state) {
       var eventType = this._seanceGetEventType(entityId, state);
-      if(this.seanceStates[state].listener) {
+      if (this.seanceStates[state].listener) {
         Polymer.dom(this).parentNode.removeEventListener(eventType, this.seanceStates[state].listener);
       }
     },
@@ -172,11 +172,11 @@
         return false;
       }
       if (_.isObject(attributes)) {
-        this._fireLog('Set these attributes on #'+entity.id+':',attributes);
+        this._fireLog('Set these attributes on #' + entity.id + ':', attributes);
         _.assign(entity, attributes);
       }
       if (_.isFunction(callback)) {
-        this._fireLog('Call callback with entity #'+entity.id);
+        this._fireLog('Call callback with entity #' + entity.id);
         callback.call(this, entity);
       }
       this._seanceFire('seance-complete');
@@ -206,11 +206,11 @@
      * @param {string} suffix any string
      * @private
      */
-    _seanceFire: function(suffix) {
+    _seanceFire: function (suffix) {
       if (!_.isEmpty(this.id)) {
         var eventType = this._seanceGetEventType(this.id, suffix);
         this.fire(eventType);
-        this._fireLog('Fired '+eventType);
+        this._fireLog('Fired ' + eventType);
       }
     },
 

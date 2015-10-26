@@ -18,27 +18,28 @@
       background-color: white;
       padding: 10px;
     }
+
     code {
       font-size: 16px;
       color: blue;
     }
 
     .demo-button {
-      margin-top:20px;
-      float:left;
+      margin-top: 20px;
+      float: left;
     }
 
     .demo-func {
-      float:left;
+      float: left;
     }
 
     .status {
-      font-size:20px;
+      font-size: 20px;
     }
 
     paper-button {
       margin: 0 20px 0 0;
-      text-transform:none;
+      text-transform: none;
     }
 
     paper-button.colorful {
@@ -78,7 +79,8 @@
 
   <template id="theParent">
 
-    <p>There is a conditional template at the bottom of this element that contains a child element. The template is stamped when this element's <em>reveal</em> property is set to true true:</p>
+    <p>There is a conditional template at the bottom of this element that contains a child element. The template is
+      stamped when this element's <em>reveal</em> property is set to true true:</p>
 
     <paper-button class="colorful" raised on-click="justShow">set this.reveal = true</paper-button>
 
@@ -86,7 +88,8 @@
 
     <span class="status">this.reveal = <span>[[reveal]]</span></span>
 
-    <p>The child-element (#theChild) has a myProgress property, initially set to zero, and progress bar bound to myProgress.</p>
+    <p>The child-element (#theChild) has a myProgress property, initially set to zero, and progress bar bound to
+      myProgress.</p>
 
     <!-- DEMO 1: Setting Attributes -->
 
@@ -99,9 +102,11 @@
         this.seanceBegin('theChild', 'attached', {myProgress: 50});
         this.reveal = true;
       }
-    </pre></code>
+    </pre>
+    </code>
 
-    <p style="clear:both">Click the "demoSetAttributes()" button.<br>It sets #theChild's myProgress to 50 immediately, or when #theChild appears in the local DOM.</p>
+    <p style="clear:both">Click the "demoSetAttributes()" button.<br>It sets #theChild's myProgress to 50 immediately,
+      or when #theChild appears in the local DOM.</p>
 
     <!-- DEMO 2: Setting a Callback -->
 
@@ -114,13 +119,15 @@
         this.seanceBegin('theChild', 'attached', null, this.theCallback);
         this.reveal = true;
       },
-    </pre></code>
+    </pre>
+    </code>
 
-    <p style="clear:both">Click the "demoSetCallback()" button.<br>It displays an alert immediately, or when #theChild appears in the local DOM.
+    <p style="clear:both">Click the "demoSetCallback()" button.<br>It displays an alert immediately, or when #theChild
+      appears in the local DOM.
 
-    <template is="dom-if" if="[[reveal]]" restamp="true">
-      <child-element id="theChild" fire-log></child-element>
-    </template>
+      <template is="dom-if" if="[[reveal]]" restamp="true">
+        <child-element id="theChild" fire-log></child-element>
+      </template>
 
   </template>
 
@@ -156,13 +163,13 @@
       this.reveal = true;
     },
 
-    demoSetCallback: function(entity) {
+    demoSetCallback: function (entity) {
       this.seanceBegin('theChild', 'attached', null, this.theCallback);
       this.reveal = true;
     },
 
-    theCallback: function(entity) {
-      this._fireLog('received callback with ',entity);
+    theCallback: function (entity) {
+      this._fireLog('received callback with ', entity);
       alert('Received callback with the child element as the argument.');
     }
 
