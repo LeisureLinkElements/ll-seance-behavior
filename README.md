@@ -19,7 +19,7 @@ Usage:
 
 1. Add LeisureLinkBehaviors.SeanceBehavior to the parent and child (target) elements.
 
-          behaviors: [LeisureLinkBehaviors.FireLogBehavior, LeisureLinkBehaviors.SeanceBehavior],
+          behaviors: [LeisureLinkBehaviors.SeanceBehavior],
 
 1. The parent element can then call the seanceBegin method to set some attributes on the target element, like this:
 
