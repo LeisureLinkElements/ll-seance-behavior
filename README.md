@@ -1,4 +1,4 @@
-# ll-seance-behavior
+# Séance Behavior
 
 Enables an element to perform the following actions on any child (target) elements
 that also have this behavior, have unique HTML ids, may not yet exist in the local DOM,
