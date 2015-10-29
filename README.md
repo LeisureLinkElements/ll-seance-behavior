@@ -1,4 +1,7 @@
-# Séance Behavior ![RIP](https://github.com/LeisureLinkElements/ll-seance-behavior/blob/tests-and-demos/docs/logo.png)
+# Séance Behavior
+
+![RIP](https://github.com/LeisureLinkElements/ll-seance-behavior/blob/tests-and-demos/docs/logo.png)
+
 ### Talk to Dead Elements
 
 Enables an element to perform the following actions on any child (target) elements
