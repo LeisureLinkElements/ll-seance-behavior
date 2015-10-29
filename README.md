@@ -1,4 +1,5 @@
 # Séance Behavior
+### Talk to Dead Elements
 
 Enables an element to perform the following actions on any child (target) elements
 that also have this behavior, have unique HTML ids, may not yet exist in the local DOM,
