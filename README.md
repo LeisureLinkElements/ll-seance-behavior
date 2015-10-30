@@ -1,4 +1,8 @@
-# ll-seance-behavior
+# Séance Behavior
+
+![RIP](https://github.com/LeisureLinkElements/ll-seance-behavior/blob/tests-and-demos/docs/logo.png)
+
+### Talk to Dead Elements
 
 Enables an element to perform the following actions on any child (target) elements
 that also have this behavior, have unique HTML ids, may not yet exist in the local DOM,
@@ -19,7 +23,7 @@ Usage:
 
 1. Add LeisureLinkBehaviors.SeanceBehavior to the parent and child (target) elements.
 
-          behaviors: [LeisureLinkBehaviors.FireLogBehavior, LeisureLinkBehaviors.SeanceBehavior],
+          behaviors: [LeisureLinkBehaviors.SeanceBehavior],
 
 1. The parent element can then call the seanceBegin method to set some attributes on the target element, like this:
 

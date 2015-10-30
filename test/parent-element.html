@@ -6,6 +6,7 @@
 
   <template>
     <h2>Parent Element</h2>
+
     <p>parent's revealChild property = <span>[[revealChild]]</span></p>
     <template is="dom-if" if="[[revealChild]]" restamp="true">
       <h3>- Child Element</h3>
@@ -33,8 +34,8 @@
 
     },
 
-    aNiceCallback: function(entity) {
-      this._fireLog('received callback with ',entity);
+    aNiceCallback: function (entity) {
+      this._fireLog('received callback with ', entity);
       this.fire('aNiceCallback-called');
     }
 

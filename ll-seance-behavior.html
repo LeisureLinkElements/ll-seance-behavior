@@ -7,6 +7,8 @@
   var LeisureLinkBehaviors = LeisureLinkBehaviors || {};
 
   /**
+   * ### Summary
+   *
    * Enables an element to perform the following actions on any child (target) elements
    * that also have this behavior, have unique HTML ids, may not yet exist in the local DOM,
    * and may have not reached a desired life-cycle state ('ready', 'attached' or 'detached'):
@@ -22,11 +24,11 @@
    * - an element inside a dom-if or dom-repeat template
    * - an element dynamically added to the local DOM
    *
-   * Usage:
+   * ### Usage
    *
    * 1. Add LeisureLinkBehaviors.SeanceBehavior to the parent and child (target) elements.
    *
-   *        behaviors: [LeisureLinkBehaviors.FireLogBehavior, LeisureLinkBehaviors.SeanceBehavior],
+   *        behaviors: [LeisureLinkBehaviors.SeanceBehavior],
    *
    * 1. The parent element can then call the seanceBegin method to set some attributes on the target element, like this:
    *
@@ -45,6 +47,7 @@
    *
    *        this.seanceEnd('theTableId', 'attached');
    *
+   * @hero docs/logo.png
    * @demo
    * @polymerBehavior
    */
@@ -63,11 +66,11 @@
               is: false,
               listener: null
             },
-            attached:  {
+            attached: {
               is: false,
               listener: null
             },
-            detached:  {
+            detached: {
               is: false,
               listener: null
             }
@@ -126,7 +129,7 @@
           _this = this,
           entity = this.$$('#' + entityId);
 
-      if (_.get(entity, 'seanceStates.'+state+'.is')) {
+      if (_.get(entity, 'seanceStates.' + state + '.is')) {
         this._fireLog('#' + entityId + ' already exists and is ' + state + ', so perform actions now...');
         // Entity already exists in the desired state.
         this._seanceCommunicateToEntity(entity, attributes, callback);
@@ -154,7 +157,7 @@
      */
     seanceEnd: function (entityId, state) {
       var eventType = this._seanceGetEventType(entityId, state);
-      if(this.seanceStates[state].listener) {
+      if (this.seanceStates[state].listener) {
         Polymer.dom(this).parentNode.removeEventListener(eventType, this.seanceStates[state].listener);
       }
     },
@@ -172,11 +175,11 @@
         return false;
       }
       if (_.isObject(attributes)) {
-        this._fireLog('Set these attributes on #'+entity.id+':',attributes);
+        this._fireLog('Set these attributes on #' + entity.id + ':', attributes);
         _.assign(entity, attributes);
       }
       if (_.isFunction(callback)) {
-        this._fireLog('Call callback with entity #'+entity.id);
+        this._fireLog('Call callback with entity #' + entity.id);
         callback.call(this, entity);
       }
       this._seanceFire('seance-complete');
@@ -206,11 +209,11 @@
      * @param {string} suffix any string
      * @private
      */
-    _seanceFire: function(suffix) {
+    _seanceFire: function (suffix) {
       if (!_.isEmpty(this.id)) {
         var eventType = this._seanceGetEventType(this.id, suffix);
         this.fire(eventType);
-        this._fireLog('Fired '+eventType);
+        this._fireLog('Fired ' + eventType);
       }
     },
 
