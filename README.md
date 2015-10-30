@@ -1,6 +1,6 @@
 # Séance Behavior
 
-![RIP](https://github.com/LeisureLinkElements/ll-seance-behavior/blob/tests-and-demos/docs/logo.png)
+![RIP](docs/logo.png)
 
 ### Talk to Dead Elements
 
